@@ -12,13 +12,15 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const apollo_server_express_1 = require("apollo-server-express");
 const connection_1 = require("../../database/connection");
 const conversion = require("../../util/caseConversion");
+const queries_1 = require("./queries");
 exports.typeDef = apollo_server_express_1.gql `
   extend type Mutation {
     updateLocationById(id: String, location: UpdateLocationInput): LocationType
+    updateLocationByIdWithClearCache(id: String, location: UpdateLocationInput): LocationType
   }
 `;
 exports.resolvers = {
-    Mutation: { updateLocationById },
+    Mutation: { updateLocationById, updateLocationByIdWithClearCache },
 };
 function updateLocationById(_, { id, location }, context) {
     return __awaiter(this, void 0, void 0, function* () {
@@ -28,6 +30,18 @@ function updateLocationById(_, { id, location }, context) {
             .returning('*')
             .get(0)
             .then(conversion.camelizeKeys);
+    });
+}
+function updateLocationByIdWithClearCache(_, { id, location }, context) {
+    return __awaiter(this, void 0, void 0, function* () {
+        const result = yield connection_1.connection.from('LOCATION')
+            .where('location_id', id)
+            .update(conversion.decamelizeKeys(location))
+            .returning('*')
+            .get(0)
+            .then(conversion.camelizeKeys);
+        queries_1.dataloader.location.clear(+id);
+        return result;
     });
 }
 //# sourceMappingURL=mutations.js.map

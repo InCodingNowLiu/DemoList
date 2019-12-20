@@ -18,7 +18,7 @@ exports.typeDef = apollo_server_express_1.gql `
     getUsersByIds(ids: [String]): [UserType]
   }
 `;
-const dataloader = {
+exports.dataloader = {
     location: new DataLoader(ids => connection_1.connection.from('LOCATION')
         .whereIn('location_id', ids)
         .select()
@@ -35,7 +35,7 @@ exports.resolvers = {
         }),
         dataloaderLocation: (obj, args, context) => __awaiter(void 0, void 0, void 0, function* () {
             if (obj.locationId) {
-                const result = yield dataloader.location.load(obj.locationId);
+                const result = yield exports.dataloader.location.load(obj.locationId);
                 return result;
             }
         }),

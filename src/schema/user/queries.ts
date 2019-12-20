@@ -10,7 +10,7 @@ export const typeDef = gql`
     getUsersByIds(ids: [String]): [UserType]
   }
 `;
-const dataloader = {
+export const dataloader = {
   location: new DataLoader(ids =>
     Knex.from('LOCATION')
       .whereIn('location_id', ids as string[])
