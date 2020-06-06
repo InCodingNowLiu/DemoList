@@ -15,7 +15,7 @@
   "dependencies": {
     "@types/knex": "^0.14.26",
     "@types/node": "^12.12.14",
-    "apollo-server": "^2.9.12",
+    "apollo-server": "^2.14.2",
     "chalk": "^3.0.0",
     "dataloader": "^2.0.0",
     "dotenv": "^8.2.0",
